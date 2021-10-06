@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-var Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+var Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
 
 func main() {
 	// zerolog.TimestampFunc().Local().Format("2006-01-02 15:04:05")
