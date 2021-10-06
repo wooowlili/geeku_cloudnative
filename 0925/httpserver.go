@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/rs/zerolog"
@@ -29,6 +30,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	for k, v := range r.Header {
 		w.Header().Add(k, strings.Join(v, ""))
 	}
+	w.Header().Add("VERSION", runtime.Version())
 	Logger.Info().Str("client", IPAddr).Str("status", "200").Send()
 }
 
