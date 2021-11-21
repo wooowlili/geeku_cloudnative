@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      labels:
+        app: httpserver
+    spec:
+      containers:
+        - name: httpserver
+          image: wowlili/httpserver:v1.1
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9999
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9999
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo httpserver started> /usr/share/message"]
+            preStop:
+              exec:
+                command: [ "/bin/sh","-c","killall -0 httpserver; do sleep 1; done" ]
