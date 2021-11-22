@@ -15,6 +15,7 @@ spec:
       containers:
         - name: httpserver
           image: wowlili/httpserver:v1.1
+          imagePullPolicy: Always
           resources:
             limits:
               memory: 1Gi

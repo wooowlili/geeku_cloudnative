@@ -9,6 +9,6 @@ RUN go get -d -v \
 
 FROM alpine:3.14
 LABEL multi.label1="cncmp" multi.label2="wowlili"
-COPY --from=multistage  /go/bin/httpserver /go/bin
+COPY --from=multistage  /go/bin/httpserver /go/bin/
 EXPOSE 9999
 CMD [ "/go/bin/httpserver" ]
