@@ -16,6 +16,8 @@ spec:
         - name: httpserver
           image: wowlili/httpserver:v1.1
           imagePullPolicy: Always
+          ports:
+            - containerPort: 9999
           resources:
             limits:
               memory: 1Gi
@@ -43,3 +45,30 @@ spec:
             preStop:
               exec:
                 command: [ "/bin/sh","-c","killall -0 httpserver; do sleep 1; done" ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cncmp-httpserver
+spec:
+  ports:
+    - port: 80
+      targetPort: 9999
+  selector:
+    app: httpserver
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cncmp-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: cncmp-httpserver
+            port:
+              number: 80
