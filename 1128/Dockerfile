@@ -8,7 +8,7 @@ RUN go get -d -v \
     && go build -o /go/bin/httpserver .
 
 FROM alpine:3.14
-LABEL multi.label1="cncmp" multi.label2="wowlili"
+LABEL multi.label1="cncamp" multi.label2="wowlili"
 COPY --from=multistage  /go/bin/httpserver /go/bin/
 EXPOSE 9999
 CMD [ "/go/bin/httpserver" ]

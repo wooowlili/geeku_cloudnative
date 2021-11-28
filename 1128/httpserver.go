@@ -63,9 +63,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(k, strings.Join(v, ""))
 	}
 	w.Header().Add("VERSION", runtime.Version())
-	// w.Write([]byte("The cncmp httpserver"))
-	// fmt.Fprintln(w, "The cncmp httpserver")
-	io.WriteString(w, "The cncmp httpserver\n")
+	// w.Write([]byte("The cncamp httpserver"))
+	// fmt.Fprintln(w, "The cncamp httpserver")
+	io.WriteString(w, "The cncamp httpserver\n")
 	Logger.Info().Str("client", IPAddr).Str("status", "200").Send()
 }
 
