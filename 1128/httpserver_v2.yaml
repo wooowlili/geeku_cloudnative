@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: httpserver-deployment
+  name: httpserver-deployment-v2
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: httpserver
+      app: httpserver-v2
   template:
     metadata:
       labels:
-        app: httpserver
+        app: httpserver-v2
     spec:
       containers:
-        - name: httpserver
+        - name: httpserver-v2
           image: wowlili/httpserver:v1.1
           imagePullPolicy: Always
           ports:
@@ -49,13 +49,43 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cncmp-httpserver
+  name: cncamp-httpserver-v2
+  labels:
+    servericename: cncamp-httpserver-v2
 spec:
   ports:
-    - port: 80
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9999
+    - name: https
+      port: 443
+      protocol: TCP
       targetPort: 9999
   selector:
-    app: httpserver
-  type: LoadBalancer
-  externalIPs:
-  - 192.168.2.228
+    app: httpserver-v2
+  type: NodePort 
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cncamp-ingress-v2
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+        - cncamp-httpserver.io
+      secretName: cncamp-httpserver-v2-tls-secret
+  rules:
+  - host: cncamp-httpserver.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cncamp-httpserver-v2
+            port:
+              number: 80
