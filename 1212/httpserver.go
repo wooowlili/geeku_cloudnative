@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -63,6 +64,9 @@ func randInt(min int, max int) int {
 func Index(w http.ResponseWriter, r *http.Request) {
 	IPAddr := GetClientRealAddr(r)
 	timer := metrics.NewTimer()
+	defer timer.ObserveTotal()
+	delay := randInt(10, 2000)
+	time.Sleep(time.Millisecond * time.Duration(delay))
 	Logger.Info().Str("Client", IPAddr).Str("Status", "200")
 	for k, v := range r.Header {
 		w.Header().Add(k, strings.Join(v, ""))
@@ -72,7 +76,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintln(w, "The cncamp httpserver")
 
 	io.WriteString(w, "The cncamp httpserver\n")
-	Logger.Info().Str("client", IPAddr).Str("status", "200").Send()
+	Logger.Info().Str("client", IPAddr).Str("status", "200").Str("delay", strconv.Itoa(delay)).Send()
 }
 
 func Healthz(w http.ResponseWriter, r *http.Request) {

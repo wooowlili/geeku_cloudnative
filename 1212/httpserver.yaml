@@ -11,13 +11,18 @@ spec:
     metadata:
       labels:
         app: httpserver-v2
+      annotations:
+        prometheus.io/port: cncamp-httpserver-metrics
+        prometheus.io/scrape: "true"
     spec:
       containers:
         - name: httpserver-v2
-          image: wowlili/httpserver:v1.1
+          image: wowlili/httpserver:v1.2
           imagePullPolicy: Always
           ports:
             - containerPort: 9999
+              name: cncamp-httpserver-metrics
+              protocol: TCP
           resources:
             limits:
               memory: 1Gi
