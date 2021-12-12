@@ -14,9 +14,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/wooowlili/geeku_cloudnative/1212/metrics"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
-	"github.com/wooowlili/geeku_cloudnative/1212/metrics"
 )
 
 var Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
