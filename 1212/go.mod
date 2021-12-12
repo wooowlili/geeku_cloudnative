@@ -1,4 +1,4 @@
-module github.com/woowlili/geeku_cloudnative
+module github.com/wooowlili/geeku_cloudnative
 
 go 1.17
 
