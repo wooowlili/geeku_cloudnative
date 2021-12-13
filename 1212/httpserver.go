@@ -28,7 +28,7 @@ func main() {
 	metrics.Register()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", Index)
+	mux.HandleFunc("/hello", Index)
 	mux.HandleFunc("/healthz", Healthz)
 	mux.Handle("/metrics", promhttp.Handler())
 	done := make(chan os.Signal, 1)

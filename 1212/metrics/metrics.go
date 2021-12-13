@@ -15,7 +15,7 @@ func Register() {
 }
 
 const (
-	MetricsNamespace = "cncamp-httpserver"
+	MetricsNamespace = "cncamphttp"
 )
 
 // NewExecutionTimer provides a timer for Updater's RunOnce execution
