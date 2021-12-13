@@ -65,7 +65,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	IPAddr := GetClientRealAddr(r)
 	timer := metrics.NewTimer()
 	defer timer.ObserveTotal()
-	delay := randInt(10, 2000)
+	delay := randInt(0, 2000)
 	time.Sleep(time.Millisecond * time.Duration(delay))
 	Logger.Info().Str("Client", IPAddr).Str("Status", "200")
 	for k, v := range r.Header {
