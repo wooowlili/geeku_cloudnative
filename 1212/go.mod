@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/prometheus/client_golang v1.11.0
 	github.com/rs/zerolog v1.26.0
-	github.com/wooowlili/geeku_cloudnative/1212/metrics latest
 )
 
 require (
@@ -19,3 +18,5 @@ require (
 	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	google.golang.org/protobuf v1.26.0-rc.1 // indirect
 )
+
+replace github.com/wooowlili/geeku_cloudnative/1212 v0.0.0 => github.com/wooowlili/geeku_cloudnative/1212 latest
