@@ -30,8 +30,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", Index)
 	mux.HandleFunc("/healthz", Healthz)
-	mux.Handle("/metrics", promhttp.Hander())
-
+	mux.Handle("/metrics", promhttp.Handler())
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 

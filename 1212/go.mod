@@ -1,4 +1,4 @@
-module gihtub.com/wooowlili/geeku_cloudnative
+module github.com/wooowlili/geeku_cloudnative/1212
 
 go 1.17
 
@@ -18,5 +18,3 @@ require (
 	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	google.golang.org/protobuf v1.26.0-rc.1 // indirect
 )
-
-replace github.com/wooowlili/geeku_cloudnative/1212 v0.0.0 => github.com/wooowlili/geeku_cloudnative/1212 latest

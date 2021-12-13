@@ -12,7 +12,7 @@ spec:
       labels:
         app: httpserver-v2
       annotations:
-        prometheus.io/port: cncamp-httpserver-metrics
+        prometheus.io/port: cncamp-http
         prometheus.io/scrape: "true"
     spec:
       containers:
@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9999
-              name: cncamp-httpserver-metrics
+              name: cncamp-http
               protocol: TCP
           resources:
             limits:
