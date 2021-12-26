@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver-deployment-v2
+  namespace: cncampistio
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpserver-v2
+  template:
+    metadata:
+      labels:
+        app: httpserver-v2
+      annotations:
+        prometheus.io/port: "cncamp-http"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: httpserver-v2
+          image: wowlili/httpserver:v1.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9999
+              name: cncamp-http
+              protocol: TCP
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9999
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9999
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo httpserver started> /usr/share/message"]
+            preStop:
+              exec:
+                command: [ "/bin/sh","-c","killall -0 httpserver; do sleep 1; done" ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cncamp-httpserver-v2
+  namespace: cncampistio
+  labels:
+    servericename: cncamp-httpserver-v2
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9999
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 9999
+  selector:
+    app: httpserver-v2
+  type: NodePort 
