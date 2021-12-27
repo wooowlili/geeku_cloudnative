@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-httpserver
+  namespace: cncampistio
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-httpserver
+  template:
+    metadata:
+      labels:
+        app: backend-httpserver
+      annotations:
+        prometheus.io/port: "cncamp-backendhttp"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: backend-httpserver
+          image: wowlili/backendserver:v1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 10001
+              name: backendhttp
+              protocol: TCP
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo backend httpserver started> /usr/share/message"]
+            preStop:
+              exec:
+                command: [ "/bin/sh","-c","killall -0 httpserver; do sleep 1; done" ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-httpserver
+  namespace: cncampistio
+  labels:
+    servericename: backend-httpserver
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9999
+  selector:
+    app: backend-httpserver
+  type: NodePort

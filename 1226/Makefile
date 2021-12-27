@@ -1,4 +1,4 @@
-export tag=v1.2
+export tag=v1.3
 release:
 	echo "building httpserver container"
 	docker build -t wowlili/httpserver:${tag} .

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -14,10 +15,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/wooowlili/geeku_cloudnative/1212/metrics"
+	"github.com/wooowlili/geeku_cloudnative/1226/metrics"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog"
+	pb "github.com/wooowlili/geeku_cloudnative/1226/datapb"
+	"google.golang.org/grpc"
 )
 
 var Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
@@ -72,10 +75,26 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(k, strings.Join(v, ""))
 	}
 	w.Header().Add("VERSION", runtime.Version())
+	conn, err := grpc.Dial("backend.cncamp-httpserver.io", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+		Logger.Fatal().Err(err).Msg("Can't connect backend server")
+	}
+	defer conn.Close()
+	c := pb.NewHelloClient(conn)
+
+	// Contact the server and print out its response.
+	gctx, gcancel := context.WithTimeout(context.Background(), time.Second)
+	defer gcancel()
+	gr, err := c.SayHello(gctx, &pb.HelloRequest{Name: "cncamp"})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
 	// w.Write([]byte("The cncamp httpserver"))
 	// fmt.Fprintln(w, "The cncamp httpserver")
 
-	io.WriteString(w, "The cncamp httpserver\n")
+	backendResp := gr.GetMessage()
+	io.WriteString(w, "The cncamp httpserver\n"+backendResp+"\n")
 	Logger.Info().Str("client", IPAddr).Str("status", "200").Str("delay", strconv.Itoa(delay)).Send()
 }
 
