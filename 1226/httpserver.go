@@ -75,9 +75,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(k, strings.Join(v, ""))
 	}
 	w.Header().Add("VERSION", runtime.Version())
-	conn, err := grpc.Dial("backend.cncamp-httpserver.io", grpc.WithInsecure())
+	conn, err := grpc.Dial("backend-server:80", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
 		Logger.Fatal().Err(err).Msg("Can't connect backend server")
 	}
 	defer conn.Close()
@@ -88,7 +87,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	defer gcancel()
 	gr, err := c.SayHello(gctx, &pb.HelloRequest{Name: "cncamp"})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Fatalf("could not sayHello: %v", err)
 	}
 	// w.Write([]byte("The cncamp httpserver"))
 	// fmt.Fprintln(w, "The cncamp httpserver")

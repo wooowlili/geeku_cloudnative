@@ -48,10 +48,10 @@ metadata:
     servericename: backend-httpserver
 spec:
   ports:
-    - name: http
+    - name: tcp
       port: 80
       protocol: TCP
-      targetPort: 9999
+      targetPort: 10001
   selector:
     app: backend-httpserver
   type: NodePort
