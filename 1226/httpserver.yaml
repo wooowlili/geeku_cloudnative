@@ -65,10 +65,6 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 9999
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: 9999
   selector:
     app: httpserver-v2
-  type: NodePort 
+  type: NodePort
