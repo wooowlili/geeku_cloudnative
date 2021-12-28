@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -77,7 +76,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("VERSION", runtime.Version())
 	conn, err := grpc.Dial("backend-server:80", grpc.WithInsecure())
 	if err != nil {
-		Logger.Fatal().Err(err).Msg("Can't connect backend server")
+		Logger.Error().Err(err).Msg("Can't connect backend server")
 	}
 	defer conn.Close()
 	c := pb.NewHelloClient(conn)
@@ -87,7 +86,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	defer gcancel()
 	gr, err := c.SayHello(gctx, &pb.HelloRequest{Name: "cncamp"})
 	if err != nil {
-		log.Fatalf("could not sayHello: %v", err)
+		Logger.Error().Err(err).Msg("could not sayHello: %v")
 	}
 	// w.Write([]byte("The cncamp httpserver"))
 	// fmt.Fprintln(w, "The cncamp httpserver")
