@@ -12,7 +12,7 @@ spec:
       labels:
         app: httpserver-v2
       annotations:
-        prometheus.io/port: cncamp-http
+        prometheus.io/port: "cncamp-http"
         prometheus.io/scrape: "true"
     spec:
       containers:
